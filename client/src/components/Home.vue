@@ -72,6 +72,18 @@ export default {
 
     async function morseCodeInput() {
       if (state.morseCode.value != '') {
+        for(let i = 0; i < state.morseCode.value.length; i++) {
+          switch(state.morseCode.value[i]) {
+            case '-':
+            case '.':
+            case ' ':
+            case '/':
+              break;
+            default:
+              return changeMorseCode(state.morseCode)
+          }
+        }
+
         const params = new URLSearchParams();
         params.append('morseCode', state.morseCode.value);
 
