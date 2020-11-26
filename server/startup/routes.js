@@ -14,12 +14,12 @@ const home = require('../routes/api/home');
 const error = require('../middleware/error');
 
 module.exports = function(app) {
-  /*if (process.env.NODE_ENV == 'production') {
+  if (process.env.NODE_ENV == 'production') {
     app.use(express.static('client/dist'));
     app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+      res.sendFile(path.resolve(path.dirname(require.main.filename)), 'client', 'dist', 'index.html'))
     });
-  }*/
+  }
 
   app.use(cors());
   app.use(morgan('tiny'));
