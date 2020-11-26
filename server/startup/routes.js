@@ -32,7 +32,7 @@ module.exports = function(app) {
   app.use(cookieParser());
 
   //app.use(enforce.HTTPS({ trustProtoHeader: true }));
-  app.use(serveStatic(__dirname + '/dist'));
+  app.use(serveStatic(path.dirname(require.main.filename)));
   //app.use(history());
 
   app.use('/api/home', home);
