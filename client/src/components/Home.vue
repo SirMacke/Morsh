@@ -3,7 +3,7 @@
   <main>
     <div>
       <h2>Morse Code</h2>
-      <textarea v-model="state.morseCode.value" v-on:input="morseCodeInput()" placeholder="Input morse code here..."></textarea>
+      <textarea v-model="state.morseCode.value" v-on:input="morseCodeInput($event)" placeholder="Input morse code here..."></textarea>
     </div>
     <div>
       <h2>Hashed Code</h2>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { reactive, watch } from 'vue';
+import { reactive } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -38,56 +38,23 @@ export default {
       hashedCode: { value: '' }
     });
 
-    watch(state.morseCode, (code) => {
-      for(let i = 0; i < code.value.length; i++) {
-        switch(code.value[i]) {
-          case '-':
-          case '.':
-          case ' ':
-          case '/':
-            break;
-          default:
-            return changeMorseCode(code)
-        }
-      }
-    })
-
-    function changeMorseCode(code) {
-      let result = [];
-
-      for(let i = 0; i < code.value.length; i++) {
-        if (code.value[i] == '-') {
-          result.push('-');
-        } else if (code.value[i] == '.') {
-          result.push('.');
-        } else if (code.value[i] == ' ') {
-          result.push(' ');
-        } else if (code.value[i] == '/') {
-          result.push('/');
-        }
-      }
-      
-      state.morseCode.value = result.join('');
-    }
-
-    async function morseCodeInput() {
+    async function morseCodeInput(e) {
       const params = new URLSearchParams();
       let response;
-      if (state.morseCode.value != '') {
-        switch(state.morseCode.value[state.morseCode.value.length - 1]) {
-          case '-':
-          case '.':
-          case ' ':
-          case '/':
-            params.append('morseCode', state.morseCode.value);
 
-            response = await axios.post('/api/home', params);
+      switch(e.target.value[e.target.value.length - 1]) {
+        case '-':
+        case '.':
+        case ' ':
+        case '/':
+          params.append('morseCode', state.morseCode.value);
 
-            state.hashedCode.value = response.data;
-            break;
-          default:
-            return changeMorseCode(state.morseCode)
-        }
+          response = await axios.post('/api/home', params);
+
+          state.hashedCode.value = response.data;
+          break;
+        default:
+          return state.morseCode.value = state.morseCode.value.slice(0, state.morseCode.value.length - 1);
       }
     }
 
