@@ -71,27 +71,23 @@ export default {
     }
 
     async function morseCodeInput() {
+      const params = new URLSearchParams();
+      let response;
       if (state.morseCode.value != '') {
-        for(let i = 0; i < state.morseCode.value.length; i++) {
-          switch(state.morseCode.value[i]) {
-            case '-':
-            case '.':
-            case ' ':
-            case '/':
-              break;
-            default:
-              return changeMorseCode(state.morseCode)
-          }
+        switch(state.morseCode.value[state.morseCode.value.length - 1]) {
+          case '-':
+          case '.':
+          case ' ':
+          case '/':
+            params.append('morseCode', state.morseCode.value);
+
+            response = await axios.post('/api/home', params);
+
+            state.hashedCode.value = response.data;
+            break;
+          default:
+            return changeMorseCode(state.morseCode)
         }
-
-        const params = new URLSearchParams();
-        params.append('morseCode', state.morseCode.value);
-
-        const response = await axios.post('/api/home', params);
-
-        state.hashedCode.value = response.data;
-      } else {
-        state.hashedCode.value = '';
       }
     }
 
