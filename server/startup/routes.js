@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const cors = require('cors');
 const morgan = require('morgan');
@@ -9,16 +10,14 @@ const history = require('connect-history-api-fallback');
 const enforce = require('express-sslify');*/
 
 const cookieParser = require('cookie-parser');
-
 const home = require('../routes/api/home');
-
 const error = require('../middleware/error');
 
 module.exports = function(app) {
   if (process.env.NODE_ENV == 'production') {
     app.use(express.static('client/dist'));
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+      res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
     });
   }
 
